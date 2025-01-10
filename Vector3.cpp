@@ -2,11 +2,7 @@
 #include "CVector3.h"
 #include<math.h>
 
-
 const float kColumnWidth = 60;
-
-
-
 
 Vector3 Vector3:: operator+(const Vector3& obj)  const {
 

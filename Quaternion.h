@@ -16,19 +16,23 @@ public:
 	Quaternion operator*(const Quaternion& obj) const;
 
 	//単位
-	Quaternion Identity()const;
+	/*Quaternion Identity()const;*/
+	static Quaternion Identity();
 
 	//共役Quaternionを返す
-	Quaternion Conjugate(const Quaternion& quaternion) const;
+	Quaternion Conjugate() const;
 
 	// ノルム
-	float Norm(const Quaternion& quaternion)const;
+	float Norm()const;
 
 	// 正規化
-	Quaternion Normalize(const Quaternion& quaternion) const;
+	Quaternion Normalize() const;
 
 	// 逆Quaternion
-	Quaternion Inverse(const Quaternion& quaternion);
+	Quaternion Inverse();
+
+
+	static void QuaternionScreenPrintf(int x, int y, const Quaternion& q, const char* label);
 };
 
 
