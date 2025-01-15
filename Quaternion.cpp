@@ -40,7 +40,7 @@ Quaternion Quaternion::Normalize() const {
 }
 
 // 逆Quaternionを返す
-Quaternion Quaternion::Inverse() {
+Quaternion Quaternion::Inverse()const {
     float norm = Norm();
     if (norm == 0) {
         // 逆が存在しない場合はIdentity
@@ -58,4 +58,31 @@ void Quaternion::QuaternionScreenPrintf(int x, int y, const Quaternion& q, const
     Novice::ScreenPrintf(int(x + kColumnWidth * 2), y, "%.02f", q.z);
     Novice::ScreenPrintf(int(x + kColumnWidth * 3), y, "%.02f", q.w);
     Novice::ScreenPrintf(int(x + kColumnWidth * 5), y, "%s", label);
+}
+
+// 任意回転を表すQuaternionの生成
+Quaternion Quaternion::MakeRotateAxisAngleQuaternion(const Vector3& axis, const float& angle) {
+    // 正規化された軸を使用
+    Vector3 normalizedAxis = vNormalize(axis);
+    float halfAngle = angle / 2.0f;
+    float sinHalfAngle = std::sin(halfAngle);
+
+    return Quaternion(
+        normalizedAxis.x * sinHalfAngle,
+        normalizedAxis.y * sinHalfAngle,
+        normalizedAxis.z * sinHalfAngle,
+        std::cos(halfAngle)
+    );
+}
+
+// ベクトルをQuaternionで回転させた結果のベクトルを求める
+Vector3 Quaternion::RotateVector(const Vector3& vector) {
+    Quaternion vectorQuat(vector.x, vector.y, vector.z, 0.0f);
+    Quaternion inverseQuat = this->Inverse();
+
+    // 回転の計算
+    Quaternion rotatedQuat = (*this) * vectorQuat * inverseQuat;
+
+    // 回転後のベクトルを返す
+    return Vector3(rotatedQuat.x, rotatedQuat.y, rotatedQuat.z);
 }

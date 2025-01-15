@@ -3,6 +3,7 @@
 #include<Novice.h>
 #include<assert.h>
 #include <DirectXMath.h>
+#include"Quaternion.h"
 
 static const int kRowHeight = 20;
 static const int kColumnWidth = 70;
@@ -381,7 +382,7 @@ void MatrixScreenPrintf(int x, int y, Matrix4x4& matrix, const char* label) {
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 	//任意軸は正規化されていることが前提
-	Vector3 normAxis = Normalize(axis);
+	Vector3 normAxis = vNormalize(axis);
 
 	//任意回転行列
 	Matrix4x4 rotateAxisAngle;
@@ -419,7 +420,7 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 		Vector3 axis = (std::abs(from.x) > std::abs(from.z))
 			? Vector3{ 0.0f, 0.0f, 1.0f }
 		: Vector3{ 1.0f, 0.0f, 0.0f };
-		axis = Normalize(Cross(from, axis));
+		axis = vNormalize(Cross(from, axis));
 
 		result.m[0][0] = -1.0f + 2.0f * axis.x * axis.x;
 		result.m[0][1] = 2.0f * axis.x * axis.y;
@@ -445,7 +446,7 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	}
 
 
-	Vector3 axis = Normalize(cross);
+	Vector3 axis = vNormalize(cross);
 
 	
 	float sinTheta = Length(cross);
@@ -472,6 +473,47 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	result.m[3][3] = 1.0f;
 
 	result = Transpose(result);
+
+	return result;
+}
+
+Matrix4x4 QMakeRotateMatrix(const Quaternion& quaternion) {
+	Matrix4x4 result;
+
+	float xx = quaternion.x * quaternion.x;
+	float yy = quaternion.y * quaternion.y;
+	float zz = quaternion.z * quaternion.z;
+	float ww = quaternion.w * quaternion.w;
+
+	float xy = quaternion.x * quaternion.y;
+	float xz = quaternion.x * quaternion.z;
+	float yz = quaternion.y * quaternion.z;
+	float wx = quaternion.w * quaternion.x;
+	float wy = quaternion.w * quaternion.y;
+	float wz = quaternion.w * quaternion.z;
+
+	result.m[0][0] = ww + xx - yy - zz;
+	result.m[0][1] = 2.0f * (xy + wz);
+	result.m[0][2] = 2.0f * (xz - wy);
+	result.m[0][3] = 0.0f;
+
+
+	result.m[1][0] = 2.0f * (xy - wz);
+	result.m[1][1] = ww - xx + yy - zz;
+	result.m[1][2] = 2.0f * (yz + wx);
+	result.m[1][3] = 0.0f;
+
+	
+	result.m[2][0] = 2.0f * (xz + wy);
+	result.m[2][1] = 2.0f * (yz - wx);
+	result.m[2][2] = ww - xx - yy + zz;
+	result.m[2][3] = 0.0f;
+
+
+	result.m[3][0] = 0.0f;
+	result.m[3][1] = 0.0f;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
 
 	return result;
 }

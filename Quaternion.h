@@ -1,5 +1,4 @@
-﻿
-
+﻿#include"CVector3.h"
 class Quaternion {
 public:
 	float x;
@@ -16,7 +15,6 @@ public:
 	Quaternion operator*(const Quaternion& obj) const;
 
 	//単位
-	/*Quaternion Identity()const;*/
 	static Quaternion Identity();
 
 	//共役Quaternionを返す
@@ -29,8 +27,13 @@ public:
 	Quaternion Normalize() const;
 
 	// 逆Quaternion
-	Quaternion Inverse();
+	Quaternion Inverse()const;
 
+	//任意回転を表すQuaternionの生成
+	static Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, const float& angle);
+
+	// ベクトルをQuaternionで回転させた結果のベクトルを求める
+	 Vector3 RotateVector(const Vector3& vector);
 
 	static void QuaternionScreenPrintf(int x, int y, const Quaternion& q, const char* label);
 };

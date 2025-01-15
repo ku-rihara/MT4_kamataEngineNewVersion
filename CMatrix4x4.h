@@ -1,6 +1,7 @@
 #pragma once
 #include "CVector3.h"
 #include "CVector4.h"
+class Quaternion;
 /// <summary>
 /// 4x4行列
 /// </summary>
@@ -60,3 +61,6 @@ void MatrixScreenPrintf(int x, int y, Matrix4x4& matrix, const char* label);
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 //ある方向からある方向への回転
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+
+
+Matrix4x4 QMakeRotateMatrix(const Quaternion& quaternion);
