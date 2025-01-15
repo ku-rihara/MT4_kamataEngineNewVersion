@@ -11,14 +11,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
-	Quaternion rotation = Quaternion::MakeRotateAxisAngleQuaternion(
-		vNormalize(Vector3{ 1.0f,0.4f,-0.2f }), 0.45f);
+	Quaternion rotate0 = Quaternion::MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
+	Quaternion rotate1 = Quaternion::MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.141592f);
 
-	Vector3 pointY = { 2.1f,-0.9f,1.3f };
-	Matrix4x4 rotateMatrix = QMakeRotateMatrix(rotation);
-	Vector3 rotateByQuaternion = rotation.RotateVector(pointY);
-	Vector3 rotateByMatrix = MatrixTransform(pointY, rotateMatrix);
-
+	Quaternion interpolate0 = Quaternion::Slerp(rotate0, rotate1, 0.0f);
+	Quaternion interpolate1 = Quaternion::Slerp(rotate0, rotate1, 0.3f);
+	Quaternion interpolate2 = Quaternion::Slerp(rotate0, rotate1, 0.5f);
+	Quaternion interpolate3 = Quaternion::Slerp(rotate0, rotate1, 0.7f);
+	Quaternion interpolate4 = Quaternion::Slerp(rotate0, rotate1, 1.0f);
+	
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
 	char preKeys[256] = {0};
@@ -43,10 +44,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		Quaternion::QuaternionScreenPrintf(0, 0, rotation, "   : rotateion");
-		MatrixScreenPrintf(0, 20, rotateMatrix, "rotateMatrix");
-		VectorScreenPrintf(0, 120, rotateByQuaternion, "   : rotateByQuaternion");
-		VectorScreenPrintf(0, 140, rotateByMatrix, "   : rotateByMatrix");
+		Quaternion::QuaternionScreenPrintf(0, 0,  interpolate0, "      : interpolate0, Slerp(q0 , q1, 0.0f)");
+		Quaternion::QuaternionScreenPrintf(0, 20, interpolate1, "      : interpolate1, Slerp(q0 , q1, 0.3f)");
+		Quaternion::QuaternionScreenPrintf(0, 40, interpolate2, "      : interpolate2, Slerp(q0 , q1, 0.5f)");
+		Quaternion::QuaternionScreenPrintf(0, 60, interpolate3, "      : interpolate3, Slerp(q0 , q1, 0.7f)");
+		Quaternion::QuaternionScreenPrintf(0, 80, interpolate4, "      : interpolate4, Slerp(q0 , q1, 1.0f)");
 		///
 		/// ↑描画処理ここまで
 		///
