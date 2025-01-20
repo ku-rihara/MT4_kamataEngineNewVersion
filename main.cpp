@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
 	Quaternion rotate0 = Quaternion::MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
-	Quaternion rotate1 = Quaternion::MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.141592f);
+	Quaternion rotate1 = { -rotate0.x,-rotate0.y,-rotate0.z,-rotate0.w };
 
 	Quaternion interpolate0 = Quaternion::Slerp(rotate0, rotate1, 0.0f);
 	Quaternion interpolate1 = Quaternion::Slerp(rotate0, rotate1, 0.3f);
